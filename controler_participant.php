@@ -1,16 +1,19 @@
 <?php
 require 'connect.php'; 
 require 'model_participant.php';  
+require 'model_formation.php';
 require 'validation copy.php'; 
 
 class Ctr_participant
 {
     private Participant $model;
+    private Formation $formation;
 
     public function __construct($conn)
     {
         $this->model = new Participant($conn);
-        $this->addParticipant();
+        $this->formation=new Formation($conn);
+        #$this->addParticipant();
     }
 
     public function addParticipant() 
@@ -47,7 +50,7 @@ class Ctr_participant
     }
 
     public function show(){
-        $formations=$this->model->getFormation();
+        $formations=$this->formation->getFormation();
         include 'form_participant.php';
     }
 }
