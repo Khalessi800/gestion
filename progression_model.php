@@ -1,34 +1,27 @@
 <?php
-include 'connect.php';
-include 'pregression_model.php';
-include 'track_form.php';
+class Progression{
+    private $conn;
 
-class ProgressionColtroler{
-    private Progression $progression;
+    public $id;
+    public $participant_id;
+    public $formation_id;
+    public $score_quiz;
+    public $termine;
 
-    public function __construct($progression){
-        $this->progression=new Progression;
-        $this->addProgression();
+    public function __construct($conn){
+        $this->conn=$conn;
     }
 
-    public function add_Progression($participant_id,$formation_id,$score_quiz,$termine=false){
-        if("REQUEST_METHOD"!=='POST'){
-            header('Location: ../helper/error.php?error=1&message=Invalid request method.');
-            // echo "Invalid request method";
-            return;
-        }
+    public function addProgression($participant_id,$formation_id,$score_quiz,$termine=false){
         try{
+            $query="INSERT INTO Progression(id,participant_id,formation_id,score_quiz,termine) values(?,?,?,?)";
+            $exec=$this->conn->prepare($query);
+            $exec->execute([$participant_id,$formation_id,$score_quiz,$termine]);
+            echo "preogression assigned!";
 
-            $result=$this->progression->addProgression($participant_id,$formation_id,$score_quiz,$termine=false);
-            if($result){
-                header('Location: ../helper/sucess');
-                exit();
-            }else{
-                header('Location: ../helper/error');
-            }
-        }catch(Exception $e){
-            header("Location: ../error.php?message=?".urldecode($e->getMessage()));
-            exit();
+
+        }catch(PDOException $e){
+            echo "progression not successfully assigned ".$e->getMessage();
         }
     }
 }
