@@ -1,7 +1,7 @@
 <?php
-include 'connect.php'
-include 'pregression_model.php'
-include 'track_form.php'
+include 'connect.php';
+include 'pregression_model.php';
+include 'track_form.php';
 
 class ProgressionColtroler{
     private Progression $progression;
@@ -10,7 +10,7 @@ class ProgressionColtroler{
         $this->progression=new Progression;
         $this->addProgression();
     }
-_
+
     public function add_Progression($participant_id,$formation_id,$score_quiz,$termine=false){
         if("REQUEST_METHOD"!=='POST'){
             header('Location: ../helper/error.php?error=1&message=Invalid request method.');
@@ -18,13 +18,17 @@ _
             return;
         }
         try{
-            $result=$this->progression->addProgression($participant_id,$formation_id,$score_quiz,$termine=false));
+
+            $result=$this->progression->addProgression($participant_id,$formation_id,$score_quiz,$termine=false);
             if($result){
                 header('Location: ../helper/sucess');
                 exit();
             }else{
                 header('Location: ../helper/error');
             }
+        }catch(Exception $e){
+            header("Location: ../error.php?message=?".urldecode($e->getMessage()));
+            exit();
         }
     }
 }
